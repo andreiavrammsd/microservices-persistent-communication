@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"io"
+	"fmt"
 )
 
 func checkError(err error) {
@@ -13,8 +14,15 @@ func checkError(err error) {
 	}
 }
 
+type Response struct {
+	Error bool `json:"error"`
+	Message string `json:"message"`
+}
+
 func Index(w http.ResponseWriter, r *http.Request) {
-	var service Service
+	var serviceRequest ServiceRequest
+	var response Response
+	var status int
 	
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 100000))
 	checkError(err)
@@ -22,13 +30,32 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	e := r.Body.Close()
 	checkError(e)
 	
-	if err := json.Unmarshal(body, &service); err != nil {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(422)
-		err := json.NewEncoder(w).Encode(err)
-		checkError(err)
+	if err := json.Unmarshal(body, &serviceRequest); err != nil {
+		response = Response{
+			Error: true,
+			Message: err.Error(),
+		}
+		status = 422
+	} else {
+		if serviceIsDefined(serviceRequest.Name) {
+			message, _ := json.Marshal(serviceRequest)
+			NewQueue(config.QueueName).Publish(string(message))
+
+			response = Response{
+				Error: false,
+				Message: "Success",
+			}
+			status = 201
+		} else {
+			response = Response{
+				Error: true,
+				Message: fmt.Sprintf("Service \"%s\" is not defined.", serviceRequest.Name),
+			}
+			status = 400
+		}
 	}
-	
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(service)
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(response)
 }
