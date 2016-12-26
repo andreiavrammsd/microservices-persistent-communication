@@ -11,14 +11,18 @@ func checkError(err error) {
 	}
 }
 
+var servicesQueue *Queue
+
 func main() {
-	go NewQueue(config.QueueName).Consume(func (message Message) {
+	servicesQueue = NewQueue(config.QueueName);
+
+	go servicesQueue.Consume(func(message Message) {
 		for d := range message.Messages {
 			service, _ := NewService(d.Body)
 			service.Call()
 		}
 	})
-
+	
 	router := NewRouter()
 	log.Fatal(http.ListenAndServe(config.ServerAddress, router))
 }

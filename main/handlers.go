@@ -16,7 +16,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	} else {
 		validationError := service.Validate()
 		if validationError == nil {
-			NewQueue(config.QueueName).Publish(body)
+			servicesQueue.Publish(body)
 			response.Body.Message = "Success"
 			response.Status = http.StatusCreated
 		} else {

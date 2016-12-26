@@ -13,24 +13,25 @@ func failOnError(err error, msg string) {
 
 type Queue struct {
 	Name string
+	Channel *amqp.Channel
+	Queue amqp.Queue
 }
 
 type Message struct {
 	Messages <-chan amqp.Delivery
 	Queue amqp.Queue
 }
+
 type Consumer func(message Message)
 
-func (queue *Queue) Publish(message []byte) {
+func (queue *Queue) Connect() {
 	conn, err := amqp.Dial(config.QueueServerAddress)
 	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
 
 	ch, err := conn.Channel()
-	failOnError(err, "Failled to open a channel")
-	defer ch.Close()
+	failOnError(err, "Failed to open a channel")
 
-	q, err := ch.QueueDeclare(
+	q, errDeclare := ch.QueueDeclare(
 		queue.Name, // name
 		true, // durable
 		false, // delete when unused
@@ -38,11 +39,16 @@ func (queue *Queue) Publish(message []byte) {
 		false, // no-wait
 		nil, // arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+	failOnError(errDeclare, "Failed to declare a queue")
+	
+	queue.Channel = ch
+	queue.Queue = q
+}
 
-	e := ch.Publish(
+func (queue *Queue) Publish(message []byte) {
+	e := queue.Channel.Publish(
 		"", // exchange
-		q.Name, // routing key,
+		queue.Name, // routing key,
 		false, // mandatory,
 		false, // immediate
 		amqp.Publishing{
@@ -57,26 +63,8 @@ func (queue *Queue) Publish(message []byte) {
 }
 
 func (queue *Queue) Consume(consumer Consumer) {
-	conn, err := amqp.Dial(config.QueueServerAddress)
-	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
-
-	ch, err := conn.Channel()
-	failOnError(err, "Failled to open a channel")
-	defer ch.Close()
-
-	q, err := ch.QueueDeclare(
-		queue.Name, // name
-		true, // durable
-		false, // delete when unused
-		false, // exclusive
-		false, // no-wait
-		nil, // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
-
-	messages, err := ch.Consume(
-		q.Name, // queue
+	messages, err := queue.Channel.Consume(
+		queue.Name, // queue
 		"", // consumer
 		true, // auto-ack
 		false, // exclusive
@@ -88,13 +76,15 @@ func (queue *Queue) Consume(consumer Consumer) {
 	
 	message := Message{
 		Messages: messages,
-		Queue: q,
+		Queue: queue.Queue,
 	}
 	consumer(message)
 }
 
 func NewQueue(queueName string) *Queue {
-	return &Queue{
+	queue := &Queue{
 		Name: queueName,
-	};
+	}
+	queue.Connect()
+	return queue
 }
