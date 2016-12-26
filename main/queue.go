@@ -15,7 +15,7 @@ type Queue struct {
 	Name string
 }
 
-func (queue *Queue) Publish(message string) {
+func (queue *Queue) Publish(message []byte) {
 	conn, err := amqp.Dial(config.QueueServerAddress)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -33,7 +33,7 @@ func (queue *Queue) Publish(message string) {
 		nil, // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-	
+
 	e := ch.Publish(
 		"", // exchange
 		q.Name, // routing key,
@@ -42,12 +42,12 @@ func (queue *Queue) Publish(message string) {
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
 			ContentType: "text/plain",
-			Body: []byte(message),
+			Body: message,
 		},
 	)
-	
+
 	failOnError(e, "Failed to publish a message")
-	log.Printf(" [x] Send %s", message)
+	log.Printf(" [x] Send %s", string(message))
 }
 
 func NewQueue(queueName string) *Queue {

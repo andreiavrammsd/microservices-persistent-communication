@@ -1,25 +1,32 @@
 package main
 
-type ServiceRequest struct {
-	Name   string `json:"name"`
-	Path   string `json:"path"`
+import (
+	"encoding/json"
+	"fmt"
+	"errors"
+)
+
+type Service struct {
+	Url    string `json:"url"`
 	Method string `json:"method"`
 	Body   string `json:"body"`
 }
 
-type Service struct {
-	Address string
+func (s *Service) Validate() error {
+	if len(s.Url) == 0 {
+		return errors.New("Invalid service")
+	}
+	
+	return nil
 }
 
-type Services map[string]Service
-
-var services = Services{
-	"notification": Service{
-		Address: "http://zonga.ro",
-	},
+func (s *Service) Call() {
+	fmt.Println(s.Url)
 }
 
-func serviceIsDefined(name string) bool {
-	_, isDefined := services[name]
-	return isDefined
+func NewService(s []byte) (*Service, error) {
+	var service *Service
+	var err error
+	err = json.Unmarshal(s, &service)
+	return service, err
 }
