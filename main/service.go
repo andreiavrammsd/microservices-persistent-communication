@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"errors"
+	"time"
+	"math/rand"
 )
 
 type Service struct {
@@ -20,8 +22,11 @@ func (s *Service) Validate() error {
 	return nil
 }
 
-func (s *Service) Call() {
+func (s *Service) Call() bool {
 	fmt.Println(s.Url)
+
+	rand.Seed(time.Now().Unix())
+	return rand.Intn(10 - 1) + 1 <= 5
 }
 
 func NewService(s []byte) (*Service, error) {

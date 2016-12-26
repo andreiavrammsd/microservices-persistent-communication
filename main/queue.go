@@ -66,7 +66,7 @@ func (queue *Queue) Consume(consumer Consumer) {
 	messages, err := queue.Channel.Consume(
 		queue.Name, // queue
 		"", // consumer
-		true, // auto-ack
+		false, // auto-ack
 		false, // exclusive
 		false, // no-local
 		false, // no-wait

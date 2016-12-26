@@ -37,7 +37,7 @@ func NewResponse(w http.ResponseWriter) *Response {
 		writer: w,
 	}
 
-	response.Headers["Content-Type"] = "application/json; charset=UTF-8";
+	response.Headers["Content-Type"] = "application/json; charset=UTF-8"
 	
 	return response
 }
