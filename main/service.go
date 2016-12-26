@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"errors"
-	"time"
-	"math/rand"
+	"net/http"
+	"bytes"
+	"log"
 )
 
 type Service struct {
@@ -23,10 +23,19 @@ func (s *Service) Validate() error {
 }
 
 func (s *Service) Call() bool {
-	fmt.Println(s.Url)
+	body := []byte(s.Body)
+	req, _ := http.NewRequest(s.Method, s.Url, bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err.Error())
+		return false
+	}
+	defer resp.Body.Close()
 
-	rand.Seed(time.Now().Unix())
-	return rand.Intn(10 - 1) + 1 <= 5
+	return resp.StatusCode >= 200 && resp.StatusCode <= 299
 }
 
 func NewService(s []byte) (*Service, error) {
