@@ -5,8 +5,12 @@ services:
     image: rabbitmq:3-management
     environment:
         RABBITMQ_DEFAULT_USER: "WhLSCKgkzL66aAvQ"
-        RABBITMQ_DEFAULT_PASS: "B=3R[X%PWXr:[u8-9f8sG=dxwA]Af4Ap"
+        RABBITMQ_DEFAULT_PASS: "Ayxae5yNGUtQVSufkp44xPgTJpaBeQKS"
         RABBITMQ_DEFAULT_VHOST: "/"
+        RABBITMQ_HIPE_COMPILE: 1
     ports:
       - "15672:15672"
       - "5672:5672"
+    volumes:
+      - /data/rabbitmq:/var/lib/rabbitmq
+    hostname: rabbitmq
