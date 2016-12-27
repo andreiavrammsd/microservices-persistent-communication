@@ -6,10 +6,10 @@ import (
 	"net/url"
 )
 
-type Validate struct {
+type Empty struct {
 }
 
-func (v *Validate) New() *validator.Validate {
+func NewValidate() *validator.Validate {
 	validate = validator.New()
 
 	validate.RegisterValidation("validurl", func(f validator.FieldLevel) bool {
@@ -63,11 +63,10 @@ func (v *Validate) New() *validator.Validate {
 			return true
 		}
 
-		err := json.Unmarshal(text, &v)
+		v := &Empty{}
+		err := json.Unmarshal(text, v)
 		return err == nil
 	})
 
 	return validate
 }
-
-var validation = &Validate{}

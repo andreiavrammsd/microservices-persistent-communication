@@ -31,7 +31,6 @@ func (s *Service) Call() bool {
 
 func NewService(s []byte) (*Service, error) {
 	var service *Service
-	var err error
-	err = json.Unmarshal(s, &service)
+	err := json.Unmarshal(s, &service)
 	return service, err
 }

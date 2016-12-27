@@ -16,20 +16,14 @@ var servicesQueue *Queue
 var validate *validator.Validate
 
 func main() {
+	log.Printf("HTTP server address: %s", config.ServerAddress)
+	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
+	log.Printf("Queue name: %s", config.QueueName)
+
 	servicesQueue = NewQueue(config.QueueName)
-	validate = validation.New()
+	validate = NewValidate()
 
-	go servicesQueue.Consume(func(message Message) {
-		for d := range message.Messages {
-			service, _ := NewService(d.Body)
-
-			if result := service.Call(); result == true {
-				d.Ack(false)
-			} else {
-				d.Nack(false, true)
-			}
-		}
-	})
+	consume(config.NumberOfConsumers)
 
 	router := NewRouter()
 	log.Fatal(http.ListenAndServe(config.ServerAddress, router))
