@@ -12,6 +12,7 @@ type Config struct {
 	Queue                        QueueConfig
 	NumberOfConsumers            int
 	RetryFailedAfterMilliseconds time.Duration
+	LogFile                      string
 }
 
 type ServerConfig struct {
@@ -48,6 +49,7 @@ func NewConfig() *Config {
 		},
 		NumberOfConsumers: numberOfConsumers,
 		RetryFailedAfterMilliseconds: time.Duration(retryFailedAfterMilliseconds),
+		LogFile: "/var/log/microservices-persistent-communication/app.log",
 	}
 }
 

@@ -66,7 +66,6 @@ func (queue *Queue) Publish(message []byte) {
 	)
 
 	failOnError(e, "Failed to publish a message")
-	log.Printf("Received: %s", string(message))
 }
 
 func (queue *Queue) Consume(consumer Consumer) {

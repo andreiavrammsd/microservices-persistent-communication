@@ -11,6 +11,7 @@ services:
       - "8008:8008"
     volumes:
       - ./:/go/src/github.com/andreiavrammsd/microservices-persistent-communication
+      - /var/log/microservices-persistent-communication:/var/log/microservices-persistent-communication
     depends_on:
       - "queue"
     restart: unless-stopped

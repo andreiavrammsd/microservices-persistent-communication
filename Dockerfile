@@ -7,3 +7,5 @@ ADD . ${APPDIR}
 WORKDIR ${APPDIR}
 RUN chmod +x wait-for-it.sh
 RUN go get
+
+RUN mkdir -p /var/log/microservices-persistent-communication

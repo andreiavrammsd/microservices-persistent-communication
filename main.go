@@ -16,6 +16,7 @@ var servicesQueue *Queue
 var validate *validator.Validate
 
 func main() {
+	SetupLogger()
 	log.Printf("HTTP server address: %s", config.Server.Address)
 	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
 	log.Printf("Queue name: %s", config.Queue.Name)
