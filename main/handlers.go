@@ -14,14 +14,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		response.Body.Message = err.Error()
 		response.Status = http.StatusUnprocessableEntity
 	} else {
-		validationError := service.Validate()
-		if validationError == nil {
+		err := validate.Struct(service)
+		if err == nil {
 			servicesQueue.Publish(body)
 			response.Body.Message = "Success"
 			response.Status = http.StatusCreated
 		} else {
 			response.Body.Error = true
-			response.Body.Message = validationError.Error()
+			response.Body.Message = err.Error()
 			response.Status = http.StatusBadRequest
 		}
 	}
