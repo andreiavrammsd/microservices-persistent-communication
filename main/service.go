@@ -5,18 +5,24 @@ import (
 	"net/http"
 	"bytes"
 	"log"
+	"fmt"
 )
 
 type Service struct {
-	Url    string `json:"url" validate:"validurl"`
-	Method string `json:"method" validate:"httpmethod"`
-	Body   json.RawMessage `json:"body" validate:"validjson"`
+	Url     string `json:"url" validate:"validurl"`
+	Method  string `json:"method" validate:"httpmethod"`
+	Body    json.RawMessage `json:"body" validate:"validjson"`
+	Headers map[string]interface{} `json:"headers"`
 }
 
 func (s *Service) Call() bool {
 	body := []byte(s.Body)
 	req, _ := http.NewRequest(s.Method, s.Url, bytes.NewBuffer(body))
-	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	for key, value := range s.Headers {
+		stringValue := fmt.Sprintf("%v", value)
+		req.Header.Set(key, stringValue)
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
