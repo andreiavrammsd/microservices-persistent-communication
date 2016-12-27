@@ -25,7 +25,7 @@ var config = &Config{
 		Address: ":8008",
 	},
 	Queue: QueueConfig{
-		Address: "127.0.0.1:5672",
+		Address: "queue:5672",
 		Username: "WhLSCKgkzL66aAvQ",
 		Password: "Ayxae5yNGUtQVSufkp44xPgTJpaBeQKS",
 		Name: "services",

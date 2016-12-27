@@ -14,6 +14,4 @@ If a call is rejected because of service down, it will be retried until successf
 * Install Docker
 * Install Docker compose
 * Clone this repository
-* Install: 
-** cd containers && chmod +x up.sh && ./up.sh
-** cd main && go get 
+* Start: docker-compose up -d
