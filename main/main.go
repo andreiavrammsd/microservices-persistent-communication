@@ -16,7 +16,7 @@ var servicesQueue *Queue
 var validate *validator.Validate
 
 func main() {
-	log.Printf("HTTP server address: %s", config.ServerAddress)
+	log.Printf("HTTP server address: %s", config.Server.Address)
 	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
 	log.Printf("Queue name: %s", config.Queue.Name)
 
@@ -26,5 +26,5 @@ func main() {
 	consume(config.NumberOfConsumers)
 
 	router := NewRouter()
-	log.Fatal(http.ListenAndServe(config.ServerAddress, router))
+	log.Fatal(http.ListenAndServe(config.Server.Address, router))
 }

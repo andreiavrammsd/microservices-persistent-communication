@@ -3,10 +3,14 @@ package main
 import "time"
 
 type Config struct {
-	ServerAddress                string
+	Server                       ServerConfig
 	Queue                        QueueConfig
 	NumberOfConsumers            int
 	RetryFailedAfterMilliseconds time.Duration
+}
+
+type ServerConfig struct {
+	Address string
 }
 
 type QueueConfig struct {
@@ -17,7 +21,9 @@ type QueueConfig struct {
 }
 
 var config = &Config{
-	ServerAddress: ":8008",
+	Server: ServerConfig{
+		Address: ":8008",
+	},
 	Queue: QueueConfig{
 		Address: "127.0.0.1:5672",
 		Username: "WhLSCKgkzL66aAvQ",
