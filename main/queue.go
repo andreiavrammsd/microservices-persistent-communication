@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/streadway/amqp"
 	"log"
+	"fmt"
 )
 
 func failOnError(err error, msg string) {
@@ -12,7 +13,7 @@ func failOnError(err error, msg string) {
 }
 
 type Queue struct {
-	Name string
+	Config QueueConfig
 	Channel *amqp.Channel
 	Queue amqp.Queue
 }
@@ -25,14 +26,20 @@ type Message struct {
 type Consumer func(message Message)
 
 func (queue *Queue) Connect() {
-	conn, err := amqp.Dial(config.QueueServerAddress)
+	url := fmt.Sprintf(
+		"amqp://%s:%s@%s/",
+		queue.Config.Username,
+		queue.Config.Password,
+		queue.Config.Address,
+	)
+	conn, err := amqp.Dial(url)
 	failOnError(err, "Failed to connect to RabbitMQ")
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 
 	q, errDeclare := ch.QueueDeclare(
-		queue.Name, // name
+		queue.Config.Name, // name
 		true, // durable
 		false, // delete when unused
 		false, // exclusive
@@ -48,7 +55,7 @@ func (queue *Queue) Connect() {
 func (queue *Queue) Publish(message []byte) {
 	e := queue.Channel.Publish(
 		"", // exchange
-		queue.Name, // routing key,
+		queue.Config.Name, // routing key,
 		false, // mandatory,
 		false, // immediate
 		amqp.Publishing{
@@ -64,7 +71,7 @@ func (queue *Queue) Publish(message []byte) {
 
 func (queue *Queue) Consume(consumer Consumer) {
 	messages, err := queue.Channel.Consume(
-		queue.Name, // queue
+		queue.Config.Name, // queue
 		"", // consumer
 		false, // auto-ack
 		false, // exclusive
@@ -81,9 +88,9 @@ func (queue *Queue) Consume(consumer Consumer) {
 	consumer(message)
 }
 
-func NewQueue(queueName string) *Queue {
+func NewQueue(config QueueConfig) *Queue {
 	queue := &Queue{
-		Name: queueName,
+		Config: config,
 	}
 	queue.Connect()
 	return queue

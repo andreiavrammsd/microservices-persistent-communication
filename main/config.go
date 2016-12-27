@@ -3,17 +3,27 @@ package main
 import "time"
 
 type Config struct {
-	ServerAddress string
-	QueueServerAddress string
-	QueueName string
-	NumberOfConsumers int
+	ServerAddress                string
+	Queue                        QueueConfig
+	NumberOfConsumers            int
 	RetryFailedAfterMilliseconds time.Duration
 }
 
-var config = Config{
+type QueueConfig struct {
+	Address  string
+	Username string
+	Password string
+	Name     string
+}
+
+var config = &Config{
 	ServerAddress: ":8008",
-	QueueServerAddress: "amqp://WhLSCKgkzL66aAvQ:Ayxae5yNGUtQVSufkp44xPgTJpaBeQKS@127.0.0.1:5672/",
-	QueueName: "services",
+	Queue: QueueConfig{
+		Address: "127.0.0.1:5672",
+		Username: "WhLSCKgkzL66aAvQ",
+		Password: "Ayxae5yNGUtQVSufkp44xPgTJpaBeQKS",
+		Name: "services",
+	},
 	NumberOfConsumers: 3,
 	RetryFailedAfterMilliseconds: 5000,
 }
