@@ -8,6 +8,10 @@ services:
       - "8008:8008"
     volumes:
       - ./:/go/src/github.com/andreiavrammsd/microservices-persistent-communication
+    depends_on:
+      - "queue"
+    restart: unless-stopped
+    command: ["./wait-for-it.sh", "-h", "queue", "-p", "5672", "-c", "/go/bin/microservices-persistent-communication", "-q", "-t", "300"]
   queue:
     image: rabbitmq:3-management
     environment:
@@ -22,3 +26,4 @@ services:
     volumes:
       - /data/rabbitmq:/var/lib/rabbitmq
     hostname: rabbitmq
+    restart: unless-stopped

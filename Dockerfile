@@ -5,5 +5,5 @@ RUN apk add --update git
 ENV APPDIR /go/src/github.com/andreiavrammsd/microservices-persistent-communication
 ADD . ${APPDIR}
 WORKDIR ${APPDIR}
-
-ENTRYPOINT go get && /go/bin/microservices-persistent-communication
+RUN chmod +x wait-for-it.sh
+RUN go get
