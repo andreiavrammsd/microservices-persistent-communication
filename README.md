@@ -14,4 +14,5 @@ If a call is rejected because of service down, it will be retried until successf
 * Install Docker
 * Install Docker compose
 * Clone this repository
+* cp env.dist.yml env.yml
 * Start: docker-compose up -d
