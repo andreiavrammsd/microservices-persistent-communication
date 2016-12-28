@@ -24,18 +24,18 @@ func consumer() {
 					log.Printf("Success: %s %s.", service.Method, service.Url)
 					d.Ack(false)
 				} else {
-					if service.Retry {
+					if service.Requeue {
 						log.Printf(
-							"Failed: %s %s. Retrying after %d milliseconds.",
+							"Failed: %s %s. Requeuing after %d milliseconds.",
 							service.Method,
 							service.Url,
-							config.RetryFailedAfterMilliseconds,
+							config.RequeueFailedAfterMilliseconds,
 						)
-						time.Sleep(time.Millisecond * config.RetryFailedAfterMilliseconds)
+						time.Sleep(time.Millisecond * config.RequeueFailedAfterMilliseconds)
 						d.Nack(false, true)
 					} else {
 						log.Printf(
-							"Failed: %s %s. Not retrying.",
+							"Failed: %s %s. Not requeuing as requested.",
 							service.Method,
 							service.Url,
 						)

@@ -14,7 +14,7 @@ type Service struct {
 	Method  string `json:"method" validate:"httpmethod"`
 	Body    string `json:"body" validate:"validbody"`
 	Headers map[string]interface{} `json:"headers"`
-	Retry   bool `json:"retry"`
+	Requeue bool `json:"requeue"`
 }
 
 func (s *Service) Call() bool {
@@ -43,7 +43,7 @@ func (s *Service) requestIsValid(resp *http.Response) bool {
 
 func NewService(s []byte) (Service, error) {
 	service := Service{
-		Retry: true,
+		Requeue: true,
 		Method: "GET",
 	}
 	err := json.Unmarshal(s, &service)

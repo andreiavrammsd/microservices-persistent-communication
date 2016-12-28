@@ -14,7 +14,7 @@ type Config struct {
 	Tls                          bool
 	Queue                        QueueConfig
 	NumberOfConsumers            int
-	RetryFailedAfterMilliseconds time.Duration
+	RequeueFailedAfterMilliseconds time.Duration
 	FileLogEnabled               bool
 	LogFile                      string
 	FastPublish                  bool
@@ -51,9 +51,9 @@ func NewConfig() *Config {
 		numberOfConsumers = 3
 	}
 
-	retryFailedAfterMilliseconds, err := strconv.Atoi(os.Getenv("RETRY_FAILED_AFTER_MILLISECONDS"))
-	if retryFailedAfterMilliseconds == 0 || err != nil {
-		retryFailedAfterMilliseconds = 5000
+	requeueFailedAfterMilliseconds, err := strconv.Atoi(os.Getenv("REQUEUE_FAILED_AFTER_MILLISECONDS"))
+	if requeueFailedAfterMilliseconds == 0 || err != nil {
+		requeueFailedAfterMilliseconds = 5000
 	}
 
 	fileLogEnabled, _ := strconv.ParseBool(os.Getenv("FILE_LOG_ENABLED"))
@@ -77,7 +77,7 @@ func NewConfig() *Config {
 			Name: os.Getenv("QUEUE_NAME"),
 		},
 		NumberOfConsumers: numberOfConsumers,
-		RetryFailedAfterMilliseconds: time.Duration(retryFailedAfterMilliseconds),
+		RequeueFailedAfterMilliseconds: time.Duration(requeueFailedAfterMilliseconds),
 		FileLogEnabled: fileLogEnabled,
 		LogFile: "/var/log/microservices-persistent-communication/app.log",
 		FastPublish: justPublish,

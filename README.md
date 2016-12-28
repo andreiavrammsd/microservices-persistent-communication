@@ -23,7 +23,7 @@ QUEUE_HOST: "queue" Queue service name as defined in docker-compose.yml
 QUEUE_PORT: "5672" Port for queue instance
 QUEUE_NAME: "services" Name of queue
 QUEUE_NUMBER_OF_CONSUMERS: 3 Number of queue consumers
-RETRY_FAILED_AFTER_MILLISECONDS: 5000 Time to retry failed calls after
+REQUEUE_FAILED_AFTER_MILLISECONDS: 5000 Time to requeue failed calls after
 FILE_LOG_ENABLED: 1 If 1, logs will pe published to file (disable to reduce disk IO)
 FAST_PUBLISH: 0 Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue.
 AUTHORIZATION_HEADER: X-Authorization Authorization header key for requests authorization
@@ -44,7 +44,7 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
     * method (string, optional, default GET) GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, CONNECT, TRACE
     * headers (object, optional) Key - value object with headers to send
     * body (string, optional) String to send as body (accepted content type: json, xml)
-    * retry (bool, optional, default true) Whether to retry failed calls or not
+    * requeue (bool, optional, default true) Whether to requeue failed calls or not
 * Examples
     ```
     {
@@ -58,7 +58,7 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
     ```
     {
         "url" : "https://api.myservicedomain.tld/ping",
-        "retry": false
+        "requeue": false
     }
     ```
 * Test
@@ -90,7 +90,7 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
 * The request is validated (if FAST_PUBLISH is set to 0).
 * Your request is sent to a queue.
 * One or many consumers (QUEUE_NUMBER_OF_CONSUMERS) process the queue and perform the calls.
-* If a call fails (and retry option was not set to false), it will be requeued after a specified time (RETRY_FAILED_AFTER_MILLISECONDS).
+* If a call fails (and requeue property was not sent false), it will be requeued after a specified time (REQUEUE_FAILED_AFTER_MILLISECONDS).
 
 #### Call validation rules
 
