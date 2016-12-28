@@ -20,6 +20,7 @@ func main() {
 	log.Printf("HTTP server address: %s", config.Server.Address)
 	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
 	log.Printf("Queue name: %s", config.Queue.Name)
+	log.Printf("Log to file: %v", config.FileLogEnabled)
 
 	servicesQueue = NewQueue(config.Queue)
 	validate = NewValidate()

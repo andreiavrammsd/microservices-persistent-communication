@@ -12,6 +12,7 @@ type Config struct {
 	Queue                        QueueConfig
 	NumberOfConsumers            int
 	RetryFailedAfterMilliseconds time.Duration
+	FileLogEnabled               bool
 	LogFile                      string
 }
 
@@ -37,6 +38,8 @@ func NewConfig() *Config {
 		retryFailedAfterMilliseconds = 5000
 	}
 
+	fileLogEnabled, err := strconv.ParseBool(os.Getenv("FILE_LOG_ENABLED"))
+
 	return &Config{
 		Server: ServerConfig{
 			Address: ":8008",
@@ -49,6 +52,7 @@ func NewConfig() *Config {
 		},
 		NumberOfConsumers: numberOfConsumers,
 		RetryFailedAfterMilliseconds: time.Duration(retryFailedAfterMilliseconds),
+		FileLogEnabled: fileLogEnabled,
 		LogFile: "/var/log/microservices-persistent-communication/app.log",
 	}
 }
