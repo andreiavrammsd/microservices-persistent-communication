@@ -43,6 +43,7 @@ func (s *Service) requestIsValid(resp *http.Response) bool {
 func NewService(s []byte) (Service, error) {
 	service := Service{
 		Retry: true,
+		Method: "GET",
 	}
 	err := json.Unmarshal(s, &service)
 
