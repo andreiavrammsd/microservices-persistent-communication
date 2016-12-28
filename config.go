@@ -17,6 +17,7 @@ type Config struct {
 	FileLogEnabled               bool
 	LogFile                      string
 	FastPublish                  bool
+	Validation                   ValidationConfig
 }
 
 type ServerConfig struct {
@@ -28,6 +29,11 @@ type QueueConfig struct {
 	Username string
 	Password string
 	Name     string
+}
+
+type ValidationConfig struct {
+	Protocols []string
+	Methods   []string
 }
 
 func NewConfig() *Config {
@@ -62,5 +68,9 @@ func NewConfig() *Config {
 		FileLogEnabled: fileLogEnabled,
 		LogFile: "/var/log/microservices-persistent-communication/app.log",
 		FastPublish: justPublish,
+		Validation: ValidationConfig{
+			Protocols: []string{"http", "https"},
+			Methods: []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "CONNECT", "TRACE"},
+		},
 	}
 }

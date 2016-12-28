@@ -10,8 +10,8 @@ import (
 type Empty struct {
 }
 
-func NewValidate() *validator.Validate {
-	validate = validator.New()
+func NewValidate(config ValidationConfig) *validator.Validate {
+	validate := validator.New()
 
 	validate.RegisterValidation("validurl", func(f validator.FieldLevel) bool {
 		rawurl := f.Field().String()
@@ -30,10 +30,8 @@ func NewValidate() *validator.Validate {
 			return false
 		}
 
-		protocols := [9]string{"http", "https"}
-
 		found := false
-		for _, value := range protocols {
+		for _, value := range config.Protocols {
 			if u.Scheme == value {
 				found = true
 				break
@@ -44,10 +42,9 @@ func NewValidate() *validator.Validate {
 
 	validate.RegisterValidation("httpmethod", func(f validator.FieldLevel) bool {
 		method := f.Field().String()
-		methods := [9]string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "CONNECT", "TRACE"}
 		found := false
 
-		for _, value := range methods {
+		for _, value := range config.Methods {
 			if value == method {
 				found = true
 				break
