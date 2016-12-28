@@ -32,6 +32,10 @@ func (s *Service) Call() bool {
 	}
 	defer resp.Body.Close()
 
+	return s.requestIsValid(resp)
+}
+
+func (s *Service) requestIsValid(resp *http.Response) bool {
 	return resp.StatusCode >= 200 && resp.StatusCode <= 299
 }
 
