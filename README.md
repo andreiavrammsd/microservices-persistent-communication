@@ -127,3 +127,7 @@ Also, you can increase number of consumers (see QUEUE_NUMBER_OF_CONSUMERS in Con
 * Rebuild and run service: docker-compose up -d --build
 * Rebuild and run app: docker-compose exec app go get && docker-compose restart app
 * Logs: docker-compose logs -f app
+
+#### Nice to have
+
+* Logs for all calls
