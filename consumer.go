@@ -5,6 +5,12 @@ import (
 	"log"
 )
 
+func ConsumeQueue(numberOfConsumers int) {
+	for i := 1; i <= numberOfConsumers; i++ {
+		go consumer()
+	}
+}
+
 func consumer() {
 	servicesQueue.Consume(func(message Message) {
 		for d := range message.Messages {
@@ -41,8 +47,3 @@ func consumer() {
 	})
 }
 
-func consume(numberOfConsumers int) {
-	for i := 1; i <= numberOfConsumers; i++ {
-		go consumer()
-	}
-}

@@ -26,9 +26,10 @@ QUEUE_NUMBER_OF_CONSUMERS: 3 Number of queue consumers
 RETRY_FAILED_AFTER_MILLISECONDS: 5000 Time to retry failed calls after
 FILE_LOG_ENABLED: 1 If 1, logs will pe published to file (disable to reduce disk IO)
 FAST_PUBLISH: 0 Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue.
-AUTHORIZATION_HEADER: Authorization header key for requests authorization
-AUTHORIZATION_KEY: Authorization key for requests. If empty, unauthorized requests are allowed.
-TLS: If 1, server will start on TLS. Certificates are required in the ./ssl directory.
+AUTHORIZATION_HEADER: X-Authorization Authorization header key for requests authorization
+AUTHORIZATION_KEY: yourauthorizationkey Authorization key for requests. If empty, unauthorized requests are allowed.
+TLS: 0 If 1, server will start on TLS. Certificates are required in the ./ssl directory.
+REDIRECT_TO_TLS: 1 Available only when TLS is 1. If 1, http requests will be redirected to https; if 0, http requests are not allowed.
 RABBITMQ_DEFAULT_USER: "usernameforrabbitmq" Username for rabbitmq instance
 RABBITMQ_DEFAULT_PASS: "passwordforrabbitmq" Password for rabbitmq instance
 RABBITMQ_DEFAULT_VHOST: "/" Vhost for rabbitmq instance

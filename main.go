@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"log"
 )
 
@@ -33,12 +32,8 @@ func main() {
 	log.Printf("Fast publish: %v", config.FastPublish)
 	log.Printf("Using authorization: %v", len(config.AuthorizationKey) > 0)
 
-	consume(config.NumberOfConsumers)
+	ConsumeQueue(config.NumberOfConsumers)
 
 	router := NewRouter()
-	if config.Server.Tls {
-		log.Fatal(http.ListenAndServeTLS(serverAddress, config.Server.CertFile, config.Server.KeyFile, router))
-	} else {
-		log.Fatal(http.ListenAndServe(serverAddress, router))
-	}
+	StartServer(config.Server, router)
 }

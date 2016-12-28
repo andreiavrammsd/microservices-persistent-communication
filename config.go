@@ -22,11 +22,12 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Tls        bool
-	Address    string
-	AddressTls string
-	CertFile   string
-	KeyFile    string
+	Tls           bool
+	RedirectToTls bool
+	Address       string
+	AddressTls    string
+	CertFile      string
+	KeyFile       string
 }
 
 type QueueConfig struct {
@@ -43,6 +44,7 @@ type ValidationConfig struct {
 
 func NewConfig() *Config {
 	tls, _ := strconv.ParseBool(os.Getenv("TLS"))
+	redirectToTls, _ := strconv.ParseBool(os.Getenv("REDIRECT_TO_TLS"))
 
 	numberOfConsumers, err := strconv.Atoi(os.Getenv("QUEUE_NUMBER_OF_CONSUMERS"))
 	if numberOfConsumers == 0 || err != nil {
@@ -60,6 +62,7 @@ func NewConfig() *Config {
 	return &Config{
 		Server: ServerConfig{
 			Tls: tls,
+			RedirectToTls: redirectToTls,
 			Address: ":8008",
 			AddressTls: ":8009",
 			CertFile : "./ssl/server.crt",
