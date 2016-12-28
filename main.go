@@ -20,7 +20,13 @@ var (
 func main() {
 	SetupLogger()
 
-	log.Printf("HTTP server address: %s", config.Server.Address)
+	serverAddress := config.Server.Address
+	if (config.Server.Tls) {
+		serverAddress = config.Server.AddressTls
+	}
+
+	log.Printf("HTTP server address: %s", serverAddress)
+	log.Printf("TLS: %v", config.Server.Tls)
 	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
 	log.Printf("Queue name: %s", config.Queue.Name)
 	log.Printf("Log to file: %v", config.FileLogEnabled)
@@ -30,5 +36,9 @@ func main() {
 	consume(config.NumberOfConsumers)
 
 	router := NewRouter()
-	log.Fatal(http.ListenAndServe(config.Server.Address, router))
+	if config.Server.Tls {
+		log.Fatal(http.ListenAndServeTLS(serverAddress, config.Server.CertFile, config.Server.KeyFile, router))
+	} else {
+		log.Fatal(http.ListenAndServe(serverAddress, router))
+	}
 }

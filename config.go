@@ -11,6 +11,7 @@ type Config struct {
 	Server                       ServerConfig
 	AuthorizationHeader          string
 	AuthorizationKey             string
+	Tls                          bool
 	Queue                        QueueConfig
 	NumberOfConsumers            int
 	RetryFailedAfterMilliseconds time.Duration
@@ -21,7 +22,11 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Address string
+	Tls        bool
+	Address    string
+	AddressTls string
+	CertFile   string
+	KeyFile    string
 }
 
 type QueueConfig struct {
@@ -37,6 +42,8 @@ type ValidationConfig struct {
 }
 
 func NewConfig() *Config {
+	tls, _ := strconv.ParseBool(os.Getenv("TLS"))
+
 	numberOfConsumers, err := strconv.Atoi(os.Getenv("QUEUE_NUMBER_OF_CONSUMERS"))
 	if numberOfConsumers == 0 || err != nil {
 		numberOfConsumers = 3
@@ -48,12 +55,15 @@ func NewConfig() *Config {
 	}
 
 	fileLogEnabled, _ := strconv.ParseBool(os.Getenv("FILE_LOG_ENABLED"))
-
 	justPublish, _ := strconv.ParseBool(os.Getenv("JUST_PUBLISH"))
 
 	return &Config{
 		Server: ServerConfig{
+			Tls: tls,
 			Address: ":8008",
+			AddressTls: ":8009",
+			CertFile : "./ssl/server.crt",
+			KeyFile : "./ssl/server.key",
 		},
 		AuthorizationHeader: os.Getenv("AUTHORIZATION_HEADER"),
 		AuthorizationKey: os.Getenv("AUTHORIZATION_KEY"),

@@ -9,6 +9,7 @@ services:
     image: golang:1.7.4-alpine
     ports:
       - "8008:8008"
+      - "8009:8009"
     volumes:
       - ./:/go/src/github.com/andreiavrammsd/microservices-persistent-communication
       - /var/log/microservices-persistent-communication:/var/log/microservices-persistent-communication

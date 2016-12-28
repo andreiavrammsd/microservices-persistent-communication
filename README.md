@@ -28,6 +28,7 @@ FILE_LOG_ENABLED: 1 If 1, logs will pe published to file (disable to reduce disk
 FAST_PUBLISH: 0 Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue.
 AUTHORIZATION_HEADER: Authorization header key for requests authorization
 AUTHORIZATION_KEY: Authorization key for requests. If empty, unauthorized requests are allowed.
+TLS: If 1, server will start on TLS. Certificates are required in the ./ssl directory.
 RABBITMQ_DEFAULT_USER: "usernameforrabbitmq" Username for rabbitmq instance
 RABBITMQ_DEFAULT_PASS: "passwordforrabbitmq" Password for rabbitmq instance
 RABBITMQ_DEFAULT_VHOST: "/" Vhost for rabbitmq instance
@@ -103,6 +104,11 @@ Generate the authorization hash: base64(sha256(timestamp:authorizationkey):times
 
 * unixtimestamp: Unix timestamp
 * authorizationkey: See AUTHORIZATION_KEY in Configuration
+
+If you want to start the server on TLS, set TLS option to 1 and place the certificates inside the ./ssl directory, named as:
+
+* server.crt
+* server.key
 
 #### Scaling
 
