@@ -9,7 +9,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	body := NewRequest(r).GetBody()
 
 	if config.FastPublish {
-		servicesQueue.Publish(body)
+		if len(body) > 0 {
+			servicesQueue.Publish(body)
+		}
 		return
 	}
 
