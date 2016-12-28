@@ -13,14 +13,14 @@ func failOnError(err error, msg string) {
 }
 
 type Queue struct {
-	Config QueueConfig
+	Config  QueueConfig
 	Channel *amqp.Channel
-	Queue amqp.Queue
+	Queue   amqp.Queue
 }
 
 type Message struct {
 	Messages <-chan amqp.Delivery
-	Queue amqp.Queue
+	Queue    amqp.Queue
 }
 
 type Consumer func(message Message)
@@ -47,7 +47,7 @@ func (queue *Queue) Connect() {
 		nil, // arguments
 	)
 	failOnError(errDeclare, "Failed to declare a queue")
-	
+
 	queue.Channel = ch
 	queue.Queue = q
 }
@@ -79,7 +79,7 @@ func (queue *Queue) Consume(consumer Consumer) {
 		nil, // args
 	)
 	failOnError(err, "Failed to register a consumer")
-	
+
 	message := Message{
 		Messages: messages,
 		Queue: queue.Queue,
@@ -87,8 +87,8 @@ func (queue *Queue) Consume(consumer Consumer) {
 	consumer(message)
 }
 
-func NewQueue(config QueueConfig) *Queue {
-	queue := &Queue{
+func NewQueue(config QueueConfig) Queue {
+	queue := Queue{
 		Config: config,
 	}
 	queue.Connect()
