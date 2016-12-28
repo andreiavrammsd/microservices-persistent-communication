@@ -106,7 +106,8 @@ Generate the authorization hash: base64(sha256(timestamp:authorizationkey):times
 
 #### Scaling
 
-* You can set up this tool on multiple machines and have a load balancer in front.
+You can set up this tool on multiple machines and have a load balancer in front.
+Also, you can increase number of consumers (see QUEUE_NUMBER_OF_CONSUMERS in Configuration).
 
 #### Performance testing
 
