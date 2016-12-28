@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"log"
 	"fmt"
+	"strings"
 )
 
 type Service struct {
@@ -46,6 +47,6 @@ func NewService(s []byte) (Service, error) {
 		Method: "GET",
 	}
 	err := json.Unmarshal(s, &service)
-
+	service.Method = strings.ToUpper(service.Method)
 	return service, err
 }
