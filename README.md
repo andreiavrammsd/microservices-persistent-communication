@@ -130,4 +130,5 @@ Also, you can increase number of consumers (see QUEUE_NUMBER_OF_CONSUMERS in Con
 
 #### Nice to have
 
+* Nicer error messages
 * Logs for all calls
