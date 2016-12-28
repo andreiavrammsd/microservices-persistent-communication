@@ -47,15 +47,24 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
         "url" : "https://api.myservicedomain.tld/notification",
         "method": "POST",
         "headers": {"X-Auth": "MyAuthKey", "Content-Type": "application/json; charset=UTF-8"},
-        "body": "{\"receiver\": \"john.doe@domain.tld\", \"text\": \"Welcome to the machine!\"}",
+        "body": "{\"receiver\": \"john.doe@domain.tld\", \"text\": \"Welcome to the machine!\"}"
     }
     ```
-    
+
     ```
     {
-        "retry": false,
         "url" : "https://api.myservicedomain.tld/ping",
+        "retry": false
     }
+    ```
+* Test
+    ```
+    curl -X POST -k -d '{
+                "url" : "https://api.myservicedomain.tld/notification",
+                "method": "POST",
+                "headers": {"X-Auth": "MyAuthKey", "Content-Type": "application/json; charset=UTF-8"},
+                "body": "{\"receiver\": \"john.doe@domain.tld\", \"text\": \"Welcome to the machine!\"}"
+            }' http://0.0.0.0:8008/
     ```
 
 #### Response
@@ -64,6 +73,7 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
     * 200 Only for requests with FAST_PUBLISH set to 1.
     * 202 Request was accepted
     * 400 Invalid body properties
+    * 404
     * 422 Invalid body syntax
 * Body: Json string with the following properties:
     * error (bool) Whether the publish was successful or not
