@@ -27,9 +27,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		err := validate.Struct(service)
 		if err == nil {
 			servicesQueue.Publish(body)
-			response.Body.Message = "Success"
-			response.Status = http.StatusCreated
-			log.Printf("Received: %s", string(body))
+			response.Body.Message = http.StatusText(http.StatusAccepted)
+			response.Status = http.StatusAccepted
+			log.Printf("Accepted: %s", string(body))
 		} else {
 			response.Body.Error = true
 			response.Body.Message = err.Error()
