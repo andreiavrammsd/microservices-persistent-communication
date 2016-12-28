@@ -11,7 +11,7 @@ import (
 type Service struct {
 	Url     string `json:"url" validate:"validurl"`
 	Method  string `json:"method" validate:"httpmethod"`
-	Body    json.RawMessage `json:"body" validate:"validjson"`
+	Body    string `json:"body" validate:"validbody"`
 	Headers map[string]interface{} `json:"headers"`
 }
 

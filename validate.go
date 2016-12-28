@@ -4,6 +4,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 	"encoding/json"
 	"net/url"
+	"encoding/xml"
 )
 
 type Empty struct {
@@ -56,16 +57,18 @@ func NewValidate() *validator.Validate {
 		return found
 	})
 
-	validate.RegisterValidation("validjson", func(f validator.FieldLevel) bool {
-		text := f.Field().Bytes()
+	validate.RegisterValidation("validbody", func(f validator.FieldLevel) bool {
+		text := f.Field().String()
 
 		if len(text) == 0 {
 			return true
 		}
 
 		v := &Empty{}
-		err := json.Unmarshal(text, v)
-		return err == nil
+		errJson := json.Unmarshal([]byte(text), v)
+		errXml := xml.Unmarshal([]byte(text), v)
+
+		return errJson == nil || errXml == nil
 	})
 
 	return validate
