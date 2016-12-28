@@ -12,15 +12,21 @@ func checkError(err error) {
 	}
 }
 
-var servicesQueue *Queue
-var validate *validator.Validate
+var (
+	servicesQueue *Queue
+	validate *validator.Validate
+	config *Config
+)
 
 func main() {
+	config = NewConfig()
+
 	SetupLogger()
 	log.Printf("HTTP server address: %s", config.Server.Address)
 	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
 	log.Printf("Queue name: %s", config.Queue.Name)
 	log.Printf("Log to file: %v", config.FileLogEnabled)
+	log.Printf("Fast publish: %v", config.FastPublish)
 
 	servicesQueue = NewQueue(config.Queue)
 	validate = NewValidate()

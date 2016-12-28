@@ -14,6 +14,7 @@ type Config struct {
 	RetryFailedAfterMilliseconds time.Duration
 	FileLogEnabled               bool
 	LogFile                      string
+	FastPublish bool
 }
 
 type ServerConfig struct {
@@ -38,7 +39,9 @@ func NewConfig() *Config {
 		retryFailedAfterMilliseconds = 5000
 	}
 
-	fileLogEnabled, err := strconv.ParseBool(os.Getenv("FILE_LOG_ENABLED"))
+	fileLogEnabled, _ := strconv.ParseBool(os.Getenv("FILE_LOG_ENABLED"))
+
+	justPublish, _ := strconv.ParseBool(os.Getenv("JUST_PUBLISH"))
 
 	return &Config{
 		Server: ServerConfig{
@@ -54,7 +57,6 @@ func NewConfig() *Config {
 		RetryFailedAfterMilliseconds: time.Duration(retryFailedAfterMilliseconds),
 		FileLogEnabled: fileLogEnabled,
 		LogFile: "/var/log/microservices-persistent-communication/app.log",
+		FastPublish: justPublish,
 	}
 }
-
-var config = NewConfig()

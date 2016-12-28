@@ -10,21 +10,26 @@ func consumer() {
 		for d := range message.Messages {
 			service, _ := NewService(d.Body)
 
-			if success := service.Call(); success == true {
-				log.Printf("Success: %s.", service.Url)
+			if len(service.Url) == 0 {
+				log.Print("Ignored: No url provided.")
 				d.Ack(false)
 			} else {
-				if service.Retry {
-					log.Printf(
-						"Failed: %s. Retrying after %d milliseconds.",
-						service.Url,
-						config.RetryFailedAfterMilliseconds,
-					)
-					time.Sleep(time.Millisecond * config.RetryFailedAfterMilliseconds)
-					d.Nack(false, true)
-				} else {
-					log.Printf("Failed: %s. Not retrying.", service.Url)
+				if success := service.Call(); success == true {
+					log.Printf("Success: %s.", service.Url)
 					d.Ack(false)
+				} else {
+					if service.Retry {
+						log.Printf(
+							"Failed: %s. Retrying after %d milliseconds.",
+							service.Url,
+							config.RetryFailedAfterMilliseconds,
+						)
+						time.Sleep(time.Millisecond * config.RetryFailedAfterMilliseconds)
+						d.Nack(false, true)
+					} else {
+						log.Printf("Failed: %s. Not retrying.", service.Url)
+						d.Ack(false)
+					}
 				}
 			}
 		}

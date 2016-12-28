@@ -7,9 +7,15 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	body := NewRequest(r).GetBody()
+
+	if config.FastPublish {
+		servicesQueue.Publish(body)
+		return
+	}
+
 	service, err := NewService(body)
 	response := NewResponse(w)
-	
+
 	if err != nil {
 		response.Body.Error = true
 		response.Body.Message = err.Error()
