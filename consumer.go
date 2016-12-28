@@ -15,19 +15,24 @@ func consumer() {
 				d.Ack(false)
 			} else {
 				if success := service.Call(); success == true {
-					log.Printf("Success: %s.", service.Url)
+					log.Printf("Success: %s %s.", service.Method, service.Url)
 					d.Ack(false)
 				} else {
 					if service.Retry {
 						log.Printf(
-							"Failed: %s. Retrying after %d milliseconds.",
+							"Failed: %s %s. Retrying after %d milliseconds.",
+							service.Method,
 							service.Url,
 							config.RetryFailedAfterMilliseconds,
 						)
 						time.Sleep(time.Millisecond * config.RetryFailedAfterMilliseconds)
 						d.Nack(false, true)
 					} else {
-						log.Printf("Failed: %s. Not retrying.", service.Url)
+						log.Printf(
+							"Failed: %s %s. Not retrying.",
+							service.Method,
+							service.Url,
+						)
 						d.Ack(false)
 					}
 				}
