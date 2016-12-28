@@ -103,6 +103,8 @@ One way to secure requests to this service is to have it behind a firewall, and 
 Also, a basic authorization can be used by sending the authorization header (see AUTHORIZATION_HEADER in Configuration) with the authorization hash.
 Generate the authorization hash: base64(sha256(timestamp:authorizationkey):timestamp)
 
+Port 15672 open for Rabbitmq management should also be behind a firewall.
+
 * unixtimestamp: Unix timestamp
 * authorizationkey: See AUTHORIZATION_KEY in Configuration
 
