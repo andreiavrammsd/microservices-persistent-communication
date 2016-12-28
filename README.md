@@ -24,8 +24,10 @@ QUEUE_PORT: "5672" Port for queue instance
 QUEUE_NAME: "services" Name of queue
 QUEUE_NUMBER_OF_CONSUMERS: 3 Number of queue consumers
 RETRY_FAILED_AFTER_MILLISECONDS: 5000 Time to retry failed calls after
-FILE_LOG_ENABLED: 1 If 1, logs will pe published to file
-FAST_PUBLISH: 0 Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue. 
+FILE_LOG_ENABLED: 1 If 1, logs will pe published to file (disable to reduce disk IO)
+FAST_PUBLISH: 0 Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue.
+AUTHORIZATION_HEADER: Authorization header key for requests authorization
+AUTHORIZATION_KEY: Authorization key for requests. If empty, unauthorized requests are allowed.
 RABBITMQ_DEFAULT_USER: "usernameforrabbitmq" Username for rabbitmq instance
 RABBITMQ_DEFAULT_PASS: "passwordforrabbitmq" Password for rabbitmq instance
 RABBITMQ_DEFAULT_VHOST: "/" Vhost for rabbitmq instance
@@ -59,7 +61,7 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
     ```
 * Test
     ```
-    curl -X POST -k -d '{
+    curl -X POST -H "X-Authorization: NTRjMTVhOWVhMzBiNjgwZWUyNjRkMzRjZDk2ODhmN2RjOWQ1ZTkzM2VhMmNiYjRiODFjOGI1ZDNkMTk1NDUzMzoxNDgyOTM4MDk4" -k -d '{
                 "url" : "https://api.myservicedomain.tld/notification",
                 "method": "POST",
                 "headers": {"X-Auth": "MyAuthKey", "Content-Type": "application/json; charset=UTF-8"},
@@ -70,9 +72,10 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
 #### Response
 
 * Status codes
-    * 200 Only for requests with FAST_PUBLISH set to 1.
+    * 200 Only for requests with FAST_PUBLISH set to 1
     * 202 Request was accepted
-    * 400 Invalid body properties
+    * 400 Invalid request body properties
+    * 401 For authorized requests with invalid authorization hash
     * 404
     * 422 Invalid body syntax
 * Body: Json string with the following properties:
@@ -90,6 +93,16 @@ RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.h
 #### Call validation rules
 
 Your services must return an http status code in 2xx class (Success) for a call to be considered successful.
+
+#### Security
+
+One way to secure requests to this service is to have it behind a firewall, and accept requests only from known hosts.
+
+Also, a basic authorization can be used by sending the authorization header (see AUTHORIZATION_HEADER in Configuration) with the authorization hash.
+Generate the authorization hash: base64(sha256(timestamp:authorizationkey):timestamp)
+
+* unixtimestamp: Unix timestamp
+* authorizationkey: See AUTHORIZATION_KEY in Configuration
 
 #### Scaling
 

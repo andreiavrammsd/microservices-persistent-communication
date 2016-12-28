@@ -27,6 +27,7 @@ func main() {
 	log.Printf("Queue name: %s", config.Queue.Name)
 	log.Printf("Log to file: %v", config.FileLogEnabled)
 	log.Printf("Fast publish: %v", config.FastPublish)
+	log.Printf("Using authorization: %v", len(config.AuthorizationKey) > 0)
 
 	servicesQueue = NewQueue(config.Queue)
 	validate = NewValidate()

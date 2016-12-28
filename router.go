@@ -13,7 +13,7 @@ func NewRouter() *mux.Router {
 		Methods(route.Method).
 		Path(route.Pattern).
 		Name(route.Name).
-		Handler(route.HandlerFunc)
+		Handler(AuthMiddleware(route.HandlerFunc))
 	}
 
 	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

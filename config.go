@@ -9,12 +9,14 @@ import (
 
 type Config struct {
 	Server                       ServerConfig
+	AuthorizationHeader          string
+	AuthorizationKey             string
 	Queue                        QueueConfig
 	NumberOfConsumers            int
 	RetryFailedAfterMilliseconds time.Duration
 	FileLogEnabled               bool
 	LogFile                      string
-	FastPublish bool
+	FastPublish                  bool
 }
 
 type ServerConfig struct {
@@ -47,6 +49,8 @@ func NewConfig() *Config {
 		Server: ServerConfig{
 			Address: ":8008",
 		},
+		AuthorizationHeader: os.Getenv("AUTHORIZATION_HEADER"),
+		AuthorizationKey: os.Getenv("AUTHORIZATION_KEY"),
 		Queue: QueueConfig{
 			Address: fmt.Sprintf("%s:%s", os.Getenv("QUEUE_HOST"), os.Getenv("QUEUE_PORT")),
 			Username: os.Getenv("RABBITMQ_DEFAULT_USER"),
