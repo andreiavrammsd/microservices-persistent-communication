@@ -134,3 +134,6 @@ Also, you can increase number of consumers (see QUEUE_NUMBER_OF_CONSUMERS in Con
 
 * Nicer error messages
 * Logs for all calls
+* Handle messages that failed to be published to the services queue
+* Option to delete all messages from queue
+* Redeclare queue if it was manually deleted
