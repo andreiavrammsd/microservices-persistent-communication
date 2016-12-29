@@ -1,8 +1,8 @@
 package main
 
 import (
-	"time"
 	"log"
+	"time"
 )
 
 func ConsumeQueue(numberOfConsumers int) {
@@ -12,8 +12,11 @@ func ConsumeQueue(numberOfConsumers int) {
 }
 
 func consumer() {
-	servicesQueue.Consume(func(message Message) {
-		for d := range message.Messages {
+	ch, _ := serviceQueueConnection.GetChannel()
+	q, _ := ch.GetQueue(config.ServiceQueueName)
+
+	q.Consume(func(delivery RabbitMqDelivery) {
+		for d := range delivery.Messages {
 			service, _ := NewService(d.Body)
 
 			if len(service.Url) == 0 {

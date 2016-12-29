@@ -8,17 +8,18 @@ import (
 )
 
 type Config struct {
-	Server                       ServerConfig
-	AuthorizationHeader          string
-	AuthorizationKey             string
-	Tls                          bool
-	Queue                        QueueConfig
-	NumberOfConsumers            int
+	Server                         ServerConfig
+	AuthorizationHeader            string
+	AuthorizationKey               string
+	Tls                            bool
+	RabbitMqConfig                 RabbitMqConfig
+	ServiceQueueName               string
+	NumberOfConsumers              int
 	RequeueFailedAfterMilliseconds time.Duration
-	FileLogEnabled               bool
-	LogFile                      string
-	FastPublish                  bool
-	Validation                   ValidationConfig
+	FileLogEnabled                 bool
+	LogFile                        string
+	FastPublish                    bool
+	Validation                     ValidationConfig
 }
 
 type ServerConfig struct {
@@ -30,19 +31,12 @@ type ServerConfig struct {
 	KeyFile       string
 }
 
-type QueueConfig struct {
-	Address  string
-	Username string
-	Password string
-	Name     string
-}
-
 type ValidationConfig struct {
 	Protocols []string
 	Methods   []string
 }
 
-func NewConfig() *Config {
+func GetConfig() *Config {
 	tls, _ := strconv.ParseBool(os.Getenv("TLS"))
 	redirectToTls, _ := strconv.ParseBool(os.Getenv("REDIRECT_TO_TLS"))
 
@@ -70,12 +64,12 @@ func NewConfig() *Config {
 		},
 		AuthorizationHeader: os.Getenv("AUTHORIZATION_HEADER"),
 		AuthorizationKey: os.Getenv("AUTHORIZATION_KEY"),
-		Queue: QueueConfig{
+		RabbitMqConfig: RabbitMqConfig{
 			Address: fmt.Sprintf("%s:%s", os.Getenv("QUEUE_HOST"), os.Getenv("QUEUE_PORT")),
 			Username: os.Getenv("RABBITMQ_DEFAULT_USER"),
 			Password: os.Getenv("RABBITMQ_DEFAULT_PASS"),
-			Name: os.Getenv("QUEUE_NAME"),
 		},
+		ServiceQueueName: os.Getenv("QUEUE_NAME"),
 		NumberOfConsumers: numberOfConsumers,
 		RequeueFailedAfterMilliseconds: time.Duration(requeueFailedAfterMilliseconds),
 		FileLogEnabled: fileLogEnabled,
