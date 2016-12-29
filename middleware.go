@@ -30,7 +30,6 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				notAuthorizedHandler(w, r)
 				return
 			}
-			log.Println(pair)
 
 			h := sha256.New()
 			h.Write([]byte(fmt.Sprintf("%s:%s", pair[1], config.AuthorizationKey)))
