@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"github.com/andreiavrammsd/go-rabbitmq"
 )
 
 type Config struct {
@@ -12,7 +13,7 @@ type Config struct {
 	AuthorizationHeader            string
 	AuthorizationKey               string
 	Tls                            bool
-	RabbitMqConfig                 RabbitMqConfig
+	RabbitMqConfig                 rabbitmq.Config
 	ServiceQueueName               string
 	NumberOfConsumers              int
 	RequeueFailedAfterMilliseconds time.Duration
@@ -64,7 +65,7 @@ func GetConfig() *Config {
 		},
 		AuthorizationHeader: os.Getenv("AUTHORIZATION_HEADER"),
 		AuthorizationKey: os.Getenv("AUTHORIZATION_KEY"),
-		RabbitMqConfig: RabbitMqConfig{
+		RabbitMqConfig: rabbitmq.Config{
 			Address: fmt.Sprintf("%s:%s", os.Getenv("QUEUE_HOST"), os.Getenv("QUEUE_PORT")),
 			Username: os.Getenv("RABBITMQ_DEFAULT_USER"),
 			Password: os.Getenv("RABBITMQ_DEFAULT_PASS"),

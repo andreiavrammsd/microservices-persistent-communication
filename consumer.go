@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"time"
+	"github.com/andreiavrammsd/go-rabbitmq"
 )
 
 func ConsumeQueue(numberOfConsumers int) {
@@ -15,7 +16,7 @@ func consumer() {
 	ch, _ := serviceQueueConnection.GetChannel()
 	q, _ := ch.GetQueue(config.ServiceQueueName)
 
-	q.Consume(func(delivery RabbitMqDelivery) {
+	q.Consume(func(delivery rabbitmq.Delivery) {
 		for d := range delivery.Messages {
 			service, _ := NewService(d.Body)
 

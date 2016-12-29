@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"gopkg.in/go-playground/validator.v9"
+	"github.com/andreiavrammsd/go-rabbitmq"
 )
 
 func checkError(err error) {
@@ -13,8 +14,8 @@ func checkError(err error) {
 
 var (
 	config *Config
-	serviceQueueConnection *RabbitMqConnection
-	serviceQueue *RabbitMqQueue
+	serviceQueueConnection *rabbitmq.Connection
+	serviceQueue *rabbitmq.Queue
 	validate *validator.Validate
 )
 
@@ -25,7 +26,7 @@ func main() {
 
 	validate = NewValidate(config.Validation)
 
-	conn, err := RabbitMqNewConnection(config.RabbitMqConfig)
+	conn, err := rabbitmq.NewConnection(&config.RabbitMqConfig)
 	checkError(err)
 
 	ch, err := conn.GetChannel()

@@ -10,9 +10,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	if config.FastPublish {
 		if len(body) > 0 {
-			message := RabbitMqNewMessage()
-			message.Body = body
-			serviceQueue.Publish(message)
+			serviceQueue.Publish(body)
 		}
 		return
 	}
@@ -28,9 +26,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	} else {
 		err := validate.Struct(service)
 		if err == nil {
-			message := RabbitMqNewMessage()
-			message.Body = body
-			serviceQueue.Publish(message)
+			serviceQueue.Publish(body)
 
 			response.Body.Message = http.StatusText(http.StatusAccepted)
 			response.Status = http.StatusAccepted
