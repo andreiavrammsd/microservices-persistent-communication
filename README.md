@@ -19,6 +19,7 @@ If a call is rejected because service is down, it will be retried until successf
 
 #### Configuration (env.yml)
 ```
+QUEUE_SCHEME: "amqp" Queue scheme
 QUEUE_HOST: "queue" Queue service name as defined in docker-compose.yml
 QUEUE_PORT: "5672" Port for queue instance
 QUEUE_NAME: "services" Name of queue

@@ -2,7 +2,6 @@ package main
 
 import (
 	"time"
-	"fmt"
 	"os"
 	"strconv"
 	"github.com/andreiavrammsd/go-rabbitmq"
@@ -41,6 +40,11 @@ func GetConfig() *Config {
 	tls, _ := strconv.ParseBool(os.Getenv("TLS"))
 	redirectToTls, _ := strconv.ParseBool(os.Getenv("REDIRECT_TO_TLS"))
 
+	queuePort, err := strconv.Atoi(os.Getenv("QUEUE_HOST"))
+	if err != nil {
+		queuePort = 5672
+	}
+
 	numberOfConsumers, err := strconv.Atoi(os.Getenv("QUEUE_NUMBER_OF_CONSUMERS"))
 	if numberOfConsumers == 0 || err != nil {
 		numberOfConsumers = 3
@@ -66,9 +70,12 @@ func GetConfig() *Config {
 		AuthorizationHeader: os.Getenv("AUTHORIZATION_HEADER"),
 		AuthorizationKey: os.Getenv("AUTHORIZATION_KEY"),
 		RabbitMqConfig: rabbitmq.Config{
-			Address: fmt.Sprintf("%s:%s", os.Getenv("QUEUE_HOST"), os.Getenv("QUEUE_PORT")),
+			Scheme: os.Getenv("QUEUE_SCHEME"),
+			Host: os.Getenv("QUEUE_HOST"),
+			Port: queuePort,
 			Username: os.Getenv("RABBITMQ_DEFAULT_USER"),
 			Password: os.Getenv("RABBITMQ_DEFAULT_PASS"),
+			Vhost: os.Getenv("RABBITMQ_DEFAULT_VHOST"),
 		},
 		ServiceQueueName: os.Getenv("QUEUE_NAME"),
 		NumberOfConsumers: numberOfConsumers,
