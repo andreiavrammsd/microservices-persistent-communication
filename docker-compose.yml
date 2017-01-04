@@ -14,7 +14,7 @@ services:
     depends_on:
       - "queue"
     restart: unless-stopped
-    command: ["./wait-for-it.sh", "-h", "$QUEUE_HOST", "-p", "$QUEUE_PORT", "-c", "/go/bin/microservices-persistent-communication", "-q", "-t", "300"]
+    command: ["dockerize", "-wait", "tcp://$QUEUE_HOST:$QUEUE_PORT", "-timeout", "300s", "/go/bin/microservices-persistent-communication"]
   queue:
     env_file: .env
     image: rabbitmq:3.6.6-management
