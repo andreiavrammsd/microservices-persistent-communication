@@ -2,9 +2,7 @@ version: '2'
 
 services:
   app:
-    extends:
-      file: env.yml
-      service: env
+    env_file: .env
     build: .
     image: golang:1.7.4-alpine
     ports:
@@ -16,11 +14,9 @@ services:
     depends_on:
       - "queue"
     restart: unless-stopped
-    command: ["./wait-for-it.sh", "-h", "queue", "-p", "5672", "-c", "/go/bin/microservices-persistent-communication", "-q", "-t", "300"]
+    command: ["./wait-for-it.sh", "-h", "$QUEUE_HOST", "-p", "$QUEUE_PORT", "-c", "/go/bin/microservices-persistent-communication", "-q", "-t", "300"]
   queue:
-    extends:
-      file: env.yml
-      service: env
+    env_file: .env
     image: rabbitmq:3.6.6-management
     ports:
       - "15672:15672"

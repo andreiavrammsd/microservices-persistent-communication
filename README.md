@@ -14,27 +14,27 @@ If a call is rejected because service is down, it will be retried until successf
 * Install Docker
 * Install Docker compose
 * Clone this repository
-* cp env.dist.yml env.yml
+* cp .env.dist .env
 * docker-compose up -d (if RABBITMQ_HIPE_COMPILE option set to 1 - see Configuration -, the service can take up to a few minutes to start)
 
-#### Configuration (env.yml)
+#### Configuration (.env)
 ```
-QUEUE_SCHEME: "amqp" Queue scheme
-QUEUE_HOST: "queue" Queue service name as defined in docker-compose.yml
-QUEUE_PORT: "5672" Port for queue instance
-QUEUE_NAME: "services" Name of queue
-QUEUE_NUMBER_OF_CONSUMERS: 3 Number of queue consumers
-REQUEUE_FAILED_AFTER_MILLISECONDS: 5000 Time to requeue failed calls after
-FILE_LOG_ENABLED: 1 If 1, logs will pe published to file (disable to reduce disk IO)
-FAST_PUBLISH: 0 Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue.
-AUTHORIZATION_HEADER: X-Authorization Authorization header key for requests authorization
-AUTHORIZATION_KEY: yourauthorizationkey Authorization key for requests. If empty, unauthorized requests are allowed.
-TLS: 0 If 1, server will start on TLS. Certificates are required in the ./ssl directory.
-REDIRECT_TO_TLS: 1 Available only when TLS is 1. If 1, http requests will be redirected to https; if 0, http requests are not allowed.
-RABBITMQ_DEFAULT_USER: "usernameforrabbitmq" Username for rabbitmq instance
-RABBITMQ_DEFAULT_PASS: "passwordforrabbitmq" Password for rabbitmq instance
-RABBITMQ_DEFAULT_VHOST: "/" Vhost for rabbitmq instance
-RABBITMQ_HIPE_COMPILE: 1 See "hipe_compile" https://www.rabbitmq.com/configure.html
+QUEUE_SCHEME=amqp - Queue scheme
+QUEUE_HOST=queue - Queue service name as defined in docker-compose.yml
+QUEUE_PORT=5672 - Port for queue instance
+QUEUE_NAME=services - Name of queue
+QUEUE_NUMBER_OF_CONSUMERS=3 - Number of queue consumers
+REQUEUE_FAILED_AFTER_MILLISECONDS=5000 - Time to requeue failed calls after
+FILE_LOG_ENABLED=1 - If 1, logs will pe published to file (disable to reduce disk IO)
+FAST_PUBLISH=0 - Performance tweaking. If 1, data validation will not be performed when making a request. Request is ignored only if body is empty, any other input is accepted. If no url, the consumers will ignore the calls and will remove them from queue.
+AUTHORIZATION_HEADER=X-Authorization - Authorization header key for requests authorization
+AUTHORIZATION_KEY=yourauthorizationkey - Authorization key for requests. If empty, unauthorized requests are allowed.
+TLS=0 - If 1, server will start on TLS. Certificates are required in the ./ssl directory.
+REDIRECT_TO_TLS=1 - Available only when TLS is 1. If 1, http requests will be redirected to https; if 0, http requests are not allowed.
+RABBITMQ_DEFAULT_USER=usernameforrabbitmq - Username for rabbitmq instance
+RABBITMQ_DEFAULT_PASS=passwordforrabbitmq - Password for rabbitmq instance
+RABBITMQ_DEFAULT_VHOST=/ - Vhost for rabbitmq instance
+RABBITMQ_HIPE_COMPILE=1 - See "hipe_compile" https://www.rabbitmq.com/configure.html
 ```
 
 #### Request
