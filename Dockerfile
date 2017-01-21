@@ -15,5 +15,6 @@ ADD . ${APPDIR}
 WORKDIR ${APPDIR}
 
 RUN go get
+RUN go build -o /go/bin/microservices-persistent-communication
 
 RUN mkdir -p /var/log/microservices-persistent-communication
