@@ -12,7 +12,7 @@ type Config struct {
 	Server                         ServerConfig
 	AuthorizationHeader            string
 	AuthorizationKey               string
-	Tls                            bool
+	TLS                            bool
 	RabbitMqConfig                 rabbitmq.Config
 	ServiceQueueName               string
 	NumberOfConsumers              int
@@ -24,10 +24,10 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Tls           bool
-	RedirectToTls bool
+	TLS           bool
+	RedirectToTLS bool
 	Address       string
-	AddressTls    string
+	AddressTLS    string
 	CertFile      string
 	KeyFile       string
 }
@@ -39,7 +39,7 @@ type ValidationConfig struct {
 
 func GetConfig() *Config {
 	tls, _ := strconv.ParseBool(os.Getenv("TLS"))
-	redirectToTls, _ := strconv.ParseBool(os.Getenv("REDIRECT_TO_TLS"))
+	redirectToTLS, _ := strconv.ParseBool(os.Getenv("REDIRECT_TO_TLS"))
 
 	queuePort, err := strconv.Atoi(os.Getenv("QUEUE_HOST"))
 	if err != nil {
@@ -61,10 +61,10 @@ func GetConfig() *Config {
 
 	return &Config{
 		Server: ServerConfig{
-			Tls:           tls,
-			RedirectToTls: redirectToTls,
+			TLS:           tls,
+			RedirectToTLS: redirectToTLS,
 			Address:       ":8008",
-			AddressTls:    ":8009",
+			AddressTLS:    ":8009",
 			CertFile:      "./ssl/server.crt",
 			KeyFile:       "./ssl/server.key",
 		},

@@ -7,15 +7,15 @@ import (
 )
 
 func StartServer(config ServerConfig, router http.Handler) {
-	if config.Tls {
-		if config.RedirectToTls {
+	if config.TLS {
+		if config.RedirectToTLS {
 			go func() {
 				log.Fatal(http.ListenAndServe(config.Address, http.HandlerFunc(redirect)))
 			}()
 		}
 
 		log.Fatal(http.ListenAndServeTLS(
-			config.AddressTls,
+			config.AddressTLS,
 			config.CertFile,
 			config.KeyFile, router,
 		))
@@ -25,8 +25,8 @@ func StartServer(config ServerConfig, router http.Handler) {
 }
 
 func redirect(w http.ResponseWriter, r *http.Request) {
-	redirectUrl := "https://" +
-		strings.Replace(r.Host, config.Server.Address, config.Server.AddressTls, 1) +
+	redirectURL := "https://" +
+		strings.Replace(r.Host, config.Server.Address, config.Server.AddressTLS, 1) +
 		r.URL.String()
-	http.Redirect(w, r, redirectUrl, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, redirectURL, http.StatusTemporaryRedirect)
 }

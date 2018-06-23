@@ -1,7 +1,5 @@
 # Microservices Persistent Communication
 
-## This is just an exercise, not considered totally reliable
-
 ### Persisting calls to microservices
 
 Sometimes you really want to be sure the calls made to your services are really successful. If a service is down, important requests could be lost forever.

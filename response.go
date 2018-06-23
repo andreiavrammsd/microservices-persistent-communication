@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -22,7 +23,10 @@ func (r *Response) Write() {
 		r.writer.Header().Set(key, value)
 	}
 	r.writer.WriteHeader(r.Status)
-	json.NewEncoder(r.writer).Encode(r.Body)
+
+	if err := json.NewEncoder(r.writer).Encode(r.Body); err != nil {
+		log.Println(err)
+	}
 }
 
 func NewResponse(w http.ResponseWriter) *Response {

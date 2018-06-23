@@ -3,23 +3,26 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 )
 
 type Service struct {
-	Url     string                 `json:"url" validate:"validurl"`
+	URL     string                 `json:"url" validate:"validurl"`
 	Method  string                 `json:"method" validate:"httpmethod"`
 	Body    string                 `json:"body" validate:"validbody"`
 	Headers map[string]interface{} `json:"headers"`
 	Requeue bool                   `json:"requeue"`
 }
 
-func (s *Service) Call() bool {
+func (s *Service) Call() (err error) {
 	body := []byte(s.Body)
-	req, _ := http.NewRequest(s.Method, s.Url, bytes.NewBuffer(body))
+	req, err := http.NewRequest(s.Method, s.URL, bytes.NewBuffer(body))
+	if err != nil {
+		return
+	}
 
 	for key, value := range s.Headers {
 		stringValue := fmt.Sprintf("%v", value)
@@ -29,12 +32,20 @@ func (s *Service) Call() bool {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Println(err.Error())
-		return false
+		return
 	}
-	defer resp.Body.Close()
 
-	return s.requestIsValid(resp)
+	defer func() {
+		if e := resp.Body.Close(); e != nil {
+			err = e
+		}
+	}()
+
+	if !s.requestIsValid(resp) {
+		return errors.New("error status code received")
+	}
+
+	return
 }
 
 func (s *Service) requestIsValid(resp *http.Response) bool {

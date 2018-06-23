@@ -25,7 +25,11 @@ func main() {
 
 	SetupLogger()
 
-	validate = NewValidate(config.Validation)
+	var err error
+	validate, err = NewValidate()
+	if err != nil {
+		log.Fatalf("Error at validation init (%s)", err)
+	}
 
 	conn, err := rabbitmq.New(&config.RabbitMqConfig)
 	checkError(err)
@@ -40,12 +44,12 @@ func main() {
 	serviceQueue = q
 
 	serverAddress := config.Server.Address
-	if config.Server.Tls {
-		serverAddress = config.Server.AddressTls
+	if config.Server.TLS {
+		serverAddress = config.Server.AddressTLS
 	}
 
 	log.Printf("HTTP server address: %s", serverAddress)
-	log.Printf("TLS: %v", config.Server.Tls)
+	log.Printf("TLS: %v", config.Server.TLS)
 	log.Printf("Number of consumers: %d", config.NumberOfConsumers)
 	log.Printf("Queue name: %s", config.ServiceQueueName)
 	log.Printf("Log to file: %v", config.FileLogEnabled)
