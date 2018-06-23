@@ -1,9 +1,9 @@
 package main
 
 import (
-	"net/http"
-	"io/ioutil"
 	"io"
+	"io/ioutil"
+	"net/http"
 )
 
 type Request struct {

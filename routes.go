@@ -1,8 +1,6 @@
 package main
 
-import (
-	"net/http"
-)
+import "net/http"
 
 type Route struct {
 	Name        string
@@ -15,9 +13,9 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
-		Name: "Index",
-		Method: "POST",
-		Pattern: "/",
+		Name:        "Index",
+		Method:      "POST",
+		Pattern:     "/",
 		HandlerFunc: Index,
 	},
 }

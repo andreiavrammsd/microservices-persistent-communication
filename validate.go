@@ -1,10 +1,11 @@
 package main
 
 import (
-	"gopkg.in/go-playground/validator.v9"
 	"encoding/json"
-	"net/url"
 	"encoding/xml"
+	"net/url"
+
+	"gopkg.in/go-playground/validator.v9"
 )
 
 type Empty struct {

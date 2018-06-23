@@ -1,19 +1,19 @@
 package main
 
 import (
-	"net/http"
 	"encoding/json"
+	"net/http"
 )
 
 type Response struct {
 	Body    *responseBody
 	Status  int
 	Headers map[string]string
-	writer http.ResponseWriter
+	writer  http.ResponseWriter
 }
 
 type responseBody struct {
-	Error   bool `json:"error"`
+	Error   bool   `json:"error"`
 	Message string `json:"message"`
 }
 
@@ -23,21 +23,20 @@ func (r *Response) Write() {
 	}
 	r.writer.WriteHeader(r.Status)
 	json.NewEncoder(r.writer).Encode(r.Body)
-
 }
 
 func NewResponse(w http.ResponseWriter) *Response {
 	response := &Response{
 		Body: &responseBody{
-			Error: false,
+			Error:   false,
 			Message: "",
 		},
-		Status: 200,
+		Status:  200,
 		Headers: make(map[string]string),
-		writer: w,
+		writer:  w,
 	}
 
 	response.Headers["Content-Type"] = "application/json; charset=UTF-8"
-	
+
 	return response
 }

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"net/http"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
-	"encoding/base64"
-	"crypto/sha256"
-	"encoding/hex"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {

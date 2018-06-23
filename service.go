@@ -1,20 +1,20 @@
 package main
 
 import (
-	"encoding/json"
-	"net/http"
 	"bytes"
-	"log"
+	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
 	"strings"
 )
 
 type Service struct {
-	Url     string `json:"url" validate:"validurl"`
-	Method  string `json:"method" validate:"httpmethod"`
-	Body    string `json:"body" validate:"validbody"`
+	Url     string                 `json:"url" validate:"validurl"`
+	Method  string                 `json:"method" validate:"httpmethod"`
+	Body    string                 `json:"body" validate:"validbody"`
 	Headers map[string]interface{} `json:"headers"`
-	Requeue bool `json:"requeue"`
+	Requeue bool                   `json:"requeue"`
 }
 
 func (s *Service) Call() bool {
@@ -44,7 +44,7 @@ func (s *Service) requestIsValid(resp *http.Response) bool {
 func NewService(s []byte) (Service, error) {
 	service := Service{
 		Requeue: true,
-		Method: "GET",
+		Method:  "GET",
 	}
 	err := json.Unmarshal(s, &service)
 	service.Method = strings.ToUpper(service.Method)

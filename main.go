@@ -2,8 +2,9 @@ package main
 
 import (
 	"log"
-	"gopkg.in/go-playground/validator.v9"
+
 	"github.com/andreiavrammsd/go-rabbitmq"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 func checkError(err error) {
@@ -13,10 +14,10 @@ func checkError(err error) {
 }
 
 var (
-	config *Config
+	config                 *Config
 	serviceQueueConnection *rabbitmq.Connection
-	serviceQueue *rabbitmq.Queue
-	validate *validator.Validate
+	serviceQueue           *rabbitmq.Queue
+	validate               *validator.Validate
 )
 
 func main() {
@@ -26,20 +27,20 @@ func main() {
 
 	validate = NewValidate(config.Validation)
 
-	conn, err := rabbitmq.NewConnection(&config.RabbitMqConfig)
+	conn, err := rabbitmq.New(&config.RabbitMqConfig)
 	checkError(err)
 
-	ch, err := conn.GetChannel()
+	ch, err := conn.Channel()
 	checkError(err)
 
-	q, err := ch.GetQueue(config.ServiceQueueName)
+	q, err := ch.Queue(config.ServiceQueueName)
 	checkError(err)
 
 	serviceQueueConnection = conn
 	serviceQueue = q
 
 	serverAddress := config.Server.Address
-	if (config.Server.Tls) {
+	if config.Server.Tls {
 		serverAddress = config.Server.AddressTls
 	}
 

@@ -3,11 +3,10 @@ package main
 import (
 	"log"
 	"net/http"
-	"github.com/gorilla/mux"
 	"strings"
 )
 
-func StartServer(config ServerConfig, router *mux.Router) {
+func StartServer(config ServerConfig, router http.Handler) {
 	if config.Tls {
 		if config.RedirectToTls {
 			go func() {
@@ -27,7 +26,7 @@ func StartServer(config ServerConfig, router *mux.Router) {
 
 func redirect(w http.ResponseWriter, r *http.Request) {
 	redirectUrl := "https://" +
-	strings.Replace(r.Host, config.Server.Address, config.Server.AddressTls, 1) +
-	r.URL.String()
+		strings.Replace(r.Host, config.Server.Address, config.Server.AddressTls, 1) +
+		r.URL.String()
 	http.Redirect(w, r, redirectUrl, http.StatusTemporaryRedirect)
 }

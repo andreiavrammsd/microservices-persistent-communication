@@ -1,9 +1,10 @@
 package main
 
 import (
-	"time"
 	"os"
 	"strconv"
+	"time"
+
 	"github.com/andreiavrammsd/go-rabbitmq"
 )
 
@@ -60,32 +61,32 @@ func GetConfig() *Config {
 
 	return &Config{
 		Server: ServerConfig{
-			Tls: tls,
+			Tls:           tls,
 			RedirectToTls: redirectToTls,
-			Address: ":8008",
-			AddressTls: ":8009",
-			CertFile : "./ssl/server.crt",
-			KeyFile : "./ssl/server.key",
+			Address:       ":8008",
+			AddressTls:    ":8009",
+			CertFile:      "./ssl/server.crt",
+			KeyFile:       "./ssl/server.key",
 		},
 		AuthorizationHeader: os.Getenv("AUTHORIZATION_HEADER"),
-		AuthorizationKey: os.Getenv("AUTHORIZATION_KEY"),
+		AuthorizationKey:    os.Getenv("AUTHORIZATION_KEY"),
 		RabbitMqConfig: rabbitmq.Config{
-			Scheme: os.Getenv("QUEUE_SCHEME"),
-			Host: os.Getenv("QUEUE_HOST"),
-			Port: queuePort,
+			Scheme:   os.Getenv("QUEUE_SCHEME"),
+			Host:     os.Getenv("QUEUE_HOST"),
+			Port:     queuePort,
 			Username: os.Getenv("RABBITMQ_DEFAULT_USER"),
 			Password: os.Getenv("RABBITMQ_DEFAULT_PASS"),
-			Vhost: os.Getenv("RABBITMQ_DEFAULT_VHOST"),
+			Vhost:    os.Getenv("RABBITMQ_DEFAULT_VHOST"),
 		},
-		ServiceQueueName: os.Getenv("QUEUE_NAME"),
-		NumberOfConsumers: numberOfConsumers,
+		ServiceQueueName:               os.Getenv("QUEUE_NAME"),
+		NumberOfConsumers:              numberOfConsumers,
 		RequeueFailedAfterMilliseconds: time.Duration(requeueFailedAfterMilliseconds),
-		FileLogEnabled: fileLogEnabled,
-		LogFile: "/var/log/microservices-persistent-communication/app.log",
-		FastPublish: justPublish,
+		FileLogEnabled:                 fileLogEnabled,
+		LogFile:                        "/var/log/microservices-persistent-communication/app.log",
+		FastPublish:                    justPublish,
 		Validation: ValidationConfig{
 			Protocols: []string{"http", "https"},
-			Methods: []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "CONNECT", "TRACE"},
+			Methods:   []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "CONNECT", "TRACE"},
 		},
 	}
 }

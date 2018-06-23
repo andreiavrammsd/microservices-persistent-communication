@@ -1,8 +1,8 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +22,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		response.Body.Error = true
 		response.Body.Message = err.Error()
 		response.Status = http.StatusUnprocessableEntity
-		log.Printf(err.Error())
+		log.Println(err.Error())
 	} else {
 		err := validate.Struct(service)
 		if err == nil {
@@ -35,7 +35,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			response.Body.Error = true
 			response.Body.Message = err.Error()
 			response.Status = http.StatusBadRequest
-			log.Printf(err.Error())
+			log.Println(err.Error())
 		}
 	}
 
